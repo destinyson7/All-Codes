@@ -1,0 +1,9 @@
+Our own 'Dhasu Single' liked a girl. Let's call her $G$. His friends encouraged him to propose G. He went ahead and proposed her. G was flattered and agreed to date him, but on one condition that G will play a game with Dhasu and Dhasu has to beat G in that game. The game is as follows:
+
+There are $X$ toffees present inside a bag. Dhasu and G take toffees from the bag, one by one. Dhasu takes first. They can take $1$, $2$ or $Y$ toffees in one turn. A player loses if he/she cannot take any more toffees from the bag (i.e. there are no toffees left in the bag when it is their turn).
+
+Dhasu is so engrossed in G, that he doesn't know if he can win. Therefore, he asks for your help. Can you determine, if Dhasu can win the game or not, assuming both the players play optimally?
+
+The input contains two integers $X$ and $Y$ ($0$ <= $X$ <= $10^9$, $3$ <= $Y$ <= $10^9$).
+
+Output "Dhasu Single is ready to mingle", if Dhasu can win, and "Dhasu is broke" otherwise (both without the quotes).

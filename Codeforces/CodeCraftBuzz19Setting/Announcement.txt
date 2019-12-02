@@ -1,0 +1,15 @@
+Coders Assemble!!
+
+We would like to invite you to CodeCraft Buzz-19, It will take place on Sunday, September 8, 2019 at 3:30 pm. 
+
+CodeCraft Buzz 19 is part of Felicity Buzz, IIIT Hyderabad's most awaited set of events for UG1 and PG1, Threads. With a plethora of intellectually engaging online contests in various fields of programming, mathematics and general knowledge, Threads is a celebration of the spirit of computing and engineering. Other than CodeCraft, we have a CTF event as well.
+
+The Problems have been prepared by Arpan Dasgupta, Tanvi Karandikar, Dolton Fernandes, Tanish Lad, and Istasis Mishra. The contest has been tested by Gaurang Tandon.
+
+Prizes for:
+    - Top 2 Non-IOI participants 
+    - Top 3 IOI + PG1 participants
+
+You will be given 6 problems and 2.5 hours to solve them. Good luck!
+
+For any queries, contact Istasis Mishra.
