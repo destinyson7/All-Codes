@@ -1,8 +1,17 @@
-1 11 5
-2 6 7
-3 13 9
-12 7 16
-14 3 25
-19 18 22
-23 13 29
-24 4 28
+2
+XXXXXXXXX
+X   X   X
+X *     X
+X   X   X
+XXXXXXXXX
+X   X
+X   X
+X   X
+XXXXX
+_____
+XXXXX
+X   X
+X * X
+X   X
+XXXXX
+_____

@@ -72,11 +72,111 @@ ll modexp(ll a, ll b, ll c)
 
 const ll L = 1e5+5;
 
+void dfs(ll i, ll j, char c, vector <string>& maze)
+{
+    if(maze[i][j] == c || maze[i][j] == '#')
+    {
+        return;
+    }
+
+    maze[i][j] = '#';
+
+    dfs(i+1, j, c, maze);
+    dfs(i-1, j, c, maze);
+    dfs(i, j+1, c, maze);
+    dfs(i, j-1, c, maze);
+}
+
+void solve()
+{
+    string s, end;
+
+    vector <string> maze;
+
+    while(true)
+    {
+        getline(cin, s);
+
+        if(s[0] == '_')
+        {
+            end = s;
+            // cout << end << endl;
+            break;
+        }
+
+        // cout << s << endl;
+
+        maze.pb(s);
+    }
+
+    // cout << "haha" << endl;
+
+    ll rows = sz(maze);
+
+    if(rows == 0)
+    {
+        return;
+    }
+
+    // ll columns = sz(maze[0]);
+
+    char c = ' ';
+
+    for(ll i=0; i<rows; i++)
+    {
+        for(ll j=0; maze[i][j] != '\0'; j++)
+        {
+            if(maze[i][j] != '*' && maze[i][j] != ' ' && maze[i][j] != '_')
+            {
+                c = maze[i][j];
+                break;
+            }
+        }
+
+        if(c != ' ')
+        {
+            break;
+        }
+    }
+
+    // cout << "**********" << endl;
+
+    // cout << c << " " << rows << endl;
+
+    for(ll i=0; i<rows; i++)
+    {
+        for(ll j=0; maze[i][j] != '\0'; j++)
+        {
+            if(maze[i][j] == '*')
+            {
+                dfs(i, j, c, maze);
+            }
+        }
+    }
+
+    for(ll i=0; i<rows; i++)
+    {
+        // cout << "** ";
+        if(maze[i][0])
+            cout << maze[i] << endl;
+    }
+    cout << end << endl;
+}
+
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL); cout.tie(NULL);
 
+    ll t;
+    cin >> t;
+
+    // cout << "haha" << endl;
+
+    while(t--)
+    {
+        solve();
+    }
 
     return 0;
 }
