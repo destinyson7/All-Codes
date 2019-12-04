@@ -80,7 +80,40 @@ int main()
     ll sum, limit;
     cin >> sum >> limit;
 
-    
+    vector <ll> ans;
+
+    for(ll i=limit; i>0; i--)
+    {
+        for(ll j=0; j<20; j++)
+        {
+            if(i & ((1LL << j)))
+            {
+                if(sum >= (1LL << j))
+                {
+                    sum -= (1LL << j);
+                    ans.pb(i);
+                }
+
+                break;
+            }
+        }
+    }
+
+    if(sum == 0)
+    {
+        cout << sz(ans) << endl;
+
+        for(auto i: ans)
+        {
+            cout << i << " ";
+        }
+        cout << endl;
+    }
+
+    else
+    {
+        cout << -1 << endl;
+    }
 
     return 0;
 }
