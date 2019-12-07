@@ -77,41 +77,29 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL); cout.tie(NULL);
 
-    ll a, b;
+    ll t;
+    cin >> t;
 
-    while(cin >> a >> b)
+    while(t--)
     {
-        vector <ll> ans(35, 0);
-        ll bit = 0;
+        ll sum, diff;
+        cin >> sum >> diff;
 
-        while(a)
+        if(diff > sum)
         {
-            ans[bit] = a%2;
-            bit++;
-            a >>= 1;
+            cout << "impossible" << endl;
         }
 
-        bit = 0;
-
-        while(b)
+        else if((sum + diff) & 1)
         {
-            ans[bit] += b%2;
-            ans[bit] %= 2;
-            bit++;
-            b >>= 1;
+            cout << "impossible" << endl;
         }
 
-        ll res = 0;
-        ll mul = 1;
-
-        for(ll i=0; i<35; i++)
+        else
         {
-            res += ans[i]*mul;
-            mul <<= 1;
+            cout << (sum+diff)/2 << " " << (sum-diff)/2 << endl;
         }
-
-        cout << res << endl;
     }
 
     return 0;
-}   
+}
