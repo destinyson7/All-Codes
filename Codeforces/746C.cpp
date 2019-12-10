@@ -77,7 +77,114 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL); cout.tie(NULL);
 
-    
+    ll s, x1, x2;
+    cin >> s >> x1 >> x2;
+
+    ll t1, t2;
+    cin >> t1 >> t2;
+
+    ll p, d;
+    cin >> p >> d;
+
+    if(t1 >= t2)
+    {
+        cout << abs(x1-x2)*t2 << endl;
+        return 0;
+    }
+
+    ll ans = abs(x1-x2)*t2;
+
+    if(x2 > x1)
+    {
+        if(d == 1)
+        {
+            if(p >= x2)
+            {
+                ll dis = s-p + s + x1 + x2-x1;
+                ans = min(ans, dis*t1);
+            }
+
+            else if(p > x1)
+            {
+                ll dis = s-p + s + x1 + x2-x1;
+                ans = min(ans, dis*t1);
+            }
+
+            else
+            {
+                ll dis = x1-p + x2-x1;
+                ans = min(ans, dis*t1);
+            }
+        }
+
+        else
+        {
+            if(p >= x2)
+            {
+                ll dis = p + x1 + x2-x1;
+                ans = min(ans, dis*t1);
+            }
+
+            else if(p > x1)
+            {
+                ll dis = p + x1 + x2-x1;
+                ans = min(ans, dis*t1);
+            }
+
+            else
+            {
+                ll dis = p + x1 + x2-x1;
+                ans = min(ans, dis*t1);
+            }
+        }
+    }
+
+    else
+    {
+        if(d == 1)
+        {
+            if(p >= x1)
+            {
+                ll dis = s-p + s-x1 + x1-x2;
+                ans = min(ans, dis*t1);
+            }
+
+            else if(p > x2)
+            {
+                ll dis = s-p + s-x1 + x1-x2;
+                ans = min(ans, dis*t1);
+            }
+
+            else
+            {
+                ll dis = s-p + s-x1 + x1-x2;
+                ans = min(ans, dis*t1);
+            }
+        }
+
+        else
+        {
+            if(p >= x1)
+            {
+                ll dis = p-x1 + x1-x2;
+                ans = min(ans, dis*t1);
+            }
+
+            else if(p >= x2)
+            {
+                ll dis = p + s + s-x1 + x1-x2;
+                ans = min(ans, dis*t1);
+            }
+
+            else
+            {
+                ll dis = p + s + s-x1 + x1-x2;
+                ans = min(ans, dis*t1);
+            }
+        }
+    }
+
+    cout << ans << endl;
 
     return 0;
 }
