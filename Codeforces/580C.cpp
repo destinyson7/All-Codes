@@ -72,13 +72,83 @@ ll modexp(ll a, ll b, ll c)
 
 const ll L = 1e5+5;
 
+vector <ll> adj[L];
+bool visited[L];
+vector <ll> a;
+ll consecutive[L];
+ll parent[L];
+
+ll n, m;
+
+ll ans = 0;
+
+void dfs(ll s)
+{
+    assert(!visited[s]);
+    visited[s] = true;
+
+    if(a[s] == 1)
+    {
+        consecutive[s] = 1 + consecutive[parent[s]];
+        
+        if(consecutive[s] > m)
+        {
+            return;
+        }
+    }
+
+    else
+    {
+        consecutive[s] = 0;
+    }
+
+    // cout << s << " " << consecutive[s] << endl;
+
+    for(auto i: adj[s])
+    {
+        if(!visited[i])
+        {
+            parent[i] = s;
+            dfs(i);
+        }
+    }
+
+    if(s != 0 && sz(adj[s]) == 1)
+    {
+        ans++;
+    }
+}
+
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL); cout.tie(NULL);
 
-    ll n, m;
+    // ll n, m;
     cin >> n >> m;
+
+    for(ll i=0; i<n; i++)
+    {
+        ll x;
+        cin >> x;
+
+        a.pb(x);
+    }
+
+    for(ll i=0; i<n-1; i++)
+    {
+        ll x, y;
+        cin >> x >> y;
+
+        x--, y--;
+
+        adj[x].pb(y);
+        adj[y].pb(x);
+    }
+
+    dfs(0);
+
+    cout << ans << endl;
 
     return 0;
 }
