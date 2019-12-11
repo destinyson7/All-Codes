@@ -80,14 +80,14 @@ int main()
     ll n, m;
     cin >> n >> m;
 
-    vector <pll> x, y;
+    map <ll, ll> cntx, cnty;
 
     for(ll i=0; i<n; i++)
     {
         ll p, v;
         cin >> p >> v;
 
-        x.pb(mp(p, v));
+        cntx[p*v]++;
     }
 
     for(ll i=0; i<m; i++)
@@ -95,10 +95,17 @@ int main()
         ll p, v;
         cin >> p >> v;
 
-        y.pb(mp(p, v));
+        cnty[p*v]++;
+    }   
+
+    ll ans = 0;
+
+    for(auto i: cntx)
+    {
+        ans += min(i.ss, cnty[i.ff]);
     }
 
-    
+    cout << ans << endl;
 
     return 0;
 }
