@@ -74,52 +74,29 @@ const ll L = 1e5+5;
 
 void solve()
 {
-    ll N;
-    cin >> N;
+    ll N, A, B, C, D, P, Q, Y;
+    cin >> N >> A >> B >> C >> D >> P >> Q >> Y;
 
-    vector <pll> p;
+    vector <ll> x;
 
     for(ll i=0; i<N; i++)
     {
-        ll l, r;
-        cin >> l >> r;
+        ll t;
+        cin >> t;
 
-        p.pb(mp(l, 0));
-        p.pb(mp(r, 1));
+        x.pb(t);
     }
 
-    sort(all(p));
+    A--, B--, C--, D--;
 
-    ll cur = 0;
-    ll ans = 1e15;
+    ll ans = abs(x[A] - x[B])*P;
 
-    for(ll i=0; i<sz(p); i++)
+    if(abs(x[C] - x[A])*P <= Y)
     {
-        if(p[i].ss == 0)
-        {
-            cur++;
-        }
-
-        else
-        {
-            if(i != sz(p) - 1)
-            {
-                ans = min(ans, cur);
-            }
-         
-            cur--;
-        }
+        ans = min(ans, Y + Q*abs(x[D] - x[C]) + P*(abs(x[B] - x[D])));
     }
 
-    if(N - (ans-1) < 2)
-    {
-        cout << -1 << endl;
-    }
-
-    else
-    {
-        cout << ans - 1 << endl;
-    }
+    cout << ans << endl;
 }
 
 int main()
