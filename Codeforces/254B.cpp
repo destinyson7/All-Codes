@@ -72,11 +72,60 @@ ll modexp(ll a, ll b, ll c)
 
 const ll L = 1e5+5;
 
+vector <ll> days = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+ll pref[15];
+
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL); cout.tie(NULL);
+    // ios_base::sync_with_stdio(false);
+    // cin.tie(NULL); cout.tie(NULL);
 
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+
+    ll n;
+    cin >> n;
+
+    for(ll i=1; i<15; i++)
+    {
+        pref[i] = days[i] + pref[i-1];
+    }
+
+    vector <pair<pll, ll>> v;
+
+    for(ll i=0; i<n; i++)
+    {
+        ll m, d, p, t;
+        cin >> m >> d >> p >> t;
+
+        ll start = pref[m-1] + d-t;
+        ll end = pref[m-1] + d-1;
+
+        v.pb(mp(mp(start, 0), p));
+        v.pb(mp(mp(end, 1), p));
+    }
+
+    sort(all(v));
+
+    ll req = 0;
+    ll ans = 0;
+
+    for(ll i=0; i<2*n; i++)
+    {
+        if(v[i].ff.ss == 0)
+        {
+            req += v[i].ss;
+        }
+
+        else
+        {
+            req -= v[i].ss;
+        }
+
+        ans = max(ans, req);
+    }
+
+    cout << ans << endl;
 
     return 0;
 }
