@@ -92,7 +92,7 @@ int main()
             d++;
         }
 
-        else
+        else if(y > sy)
         {
             u++;
         }
@@ -102,7 +102,7 @@ int main()
             l++;
         }
 
-        else
+        else if(x > sx)
         {
             r++;
         }
