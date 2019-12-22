@@ -1,0 +1,232 @@
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+ 
+using namespace __gnu_pbds;
+using namespace std;
+
+typedef long long int ll;
+typedef unsigned long long int ull;
+typedef long double ld;
+typedef pair <ll, ll> pll;
+typedef pair <int, int> pii;
+
+typedef tree <ll, null_type, less <ll>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
+// order_of_key(val): returns the number of values less than val
+// find_by_order(k): returns an iterator to the kth largest element (0-based)
+
+#define pb push_back
+#define mp make_pair
+#define ff first
+#define ss second
+#define all(a) a.begin(), a.end()
+#define sz(a) (ll)(a.size())
+#define endl "\n"
+
+template <class Ch, class Tr, class Container>
+basic_ostream <Ch, Tr> & operator << (basic_ostream <Ch, Tr> & os, Container const& x) 
+{
+    os << "{ ";
+    for(auto& y : x) 
+    {
+        os << y << " ";
+    }
+    return os << "}";
+}
+
+template <class X, class Y>
+ostream & operator << (ostream & os, pair <X, Y> const& p) 
+{
+    return os << "[" << p.ff << ", " << p.ss << "]";
+}
+
+ll gcd(ll a, ll b)
+{
+    if(b==0)
+    {
+        return a;
+    }
+
+    return gcd(b, a%b);
+}
+
+ll modexp(ll a, ll b, ll c)
+{   
+    a%=c;
+
+    ll ans = 1;
+
+    while(b)
+    {
+        if(b&1)
+        {
+            ans = (ans*a)%c;
+        }
+
+        a = (a*a)%c;
+        b >>= 1;
+    }
+
+    return ans;
+}
+
+const ll L = 1e6+5;
+
+typedef struct node 
+{
+    ll mn, mx;
+} node;
+
+node seg[4*L];
+ll lazy[4*L];
+
+node merge(node a, node b)
+{
+    node x;
+
+    x.mx = max(a.mx, b.mx);
+    x.mn = min(a.mn, b.mn);
+
+    return x;
+}
+
+void update(ll pos, ll tl, ll tr, ll l, ll r, ll val)
+{
+    if(lazy[pos] != 0)
+    {
+        seg[pos].mx += lazy[pos];
+        seg[pos].mn += lazy[pos];
+        
+        if(tl != tr)
+        {
+            lazy[2*pos] += lazy[pos];
+            lazy[2*pos+1] += lazy[pos];
+        }
+
+        lazy[pos] = 0;
+    }
+
+    if(tl > r || tr < l)
+    {
+        return;
+    }
+
+    if(tl >= l && tr <= r)
+    {
+        seg[pos].mx += val;
+        seg[pos].mn += val;
+        
+        if(tl != tr)
+        {
+            lazy[2*pos] += val;
+            lazy[2*pos+1] += val;
+        }
+
+        return;
+    }
+
+    ll mid = tl + (tr-tl)/2;
+
+    update(2*pos, tl, mid, l, r, val);
+    update(2*pos+1, mid+1, tr, l, r, val);
+
+    seg[pos] = merge(seg[2*pos], seg[2*pos+1]);
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+
+    ll n;
+    cin >> n;
+
+    string s;
+    cin >> s;
+
+    string command;
+    for(ll i=0; i<n+5; i++)
+    {
+        command += " ";
+    }
+
+    ll pos = 0;
+    ll brackets = 0;
+
+    for(ll i=0; i<n; i++)
+    {
+        if(s[i] == 'L')
+        {
+            pos = max(0LL, pos-1);
+        }
+
+        else if(s[i] == 'R')
+        {
+            pos++;
+        }
+
+        else if(s[i] == '(')
+        {
+            if(command[pos] == ')')
+            {
+                update(1, 0, n-1, pos, n-1, 2);
+                brackets += 2;
+            }
+
+            else if(command[pos] != '(')
+            {
+                update(1, 0, n-1, pos, n-1, 1);
+                brackets++;
+            }
+
+            command[pos] = '(';
+        }
+
+        else if(s[i] == ')')
+        {
+            if(command[pos] == '(')
+            {
+                update(1, 0, n-1, pos, n-1, -2);
+                brackets -= 2;
+            }
+
+            else if(command[pos] != ')')
+            {
+                update(1, 0, n-1, pos, n-1, -1);
+                brackets--;
+            }
+
+            command[pos] = ')';
+        }
+
+        else
+        {
+            if(command[pos] == '(')
+            {
+                update(1, 0, n-1, pos, n-1, -1);
+                brackets--;    
+            }
+
+            else if(command[pos] == ')')
+            {
+                update(1, 0, n-1, pos, n-1, 1);
+                brackets++;
+            }
+
+            command[pos] = s[i];
+        }
+
+        if(brackets == 0 && seg[1].mn >= 0)
+        {
+            cout << seg[1].mx << " ";
+        }
+
+        else
+        {
+            cout << -1 << " ";
+        }
+    }
+    cout << endl;
+
+    return 0;
+}
