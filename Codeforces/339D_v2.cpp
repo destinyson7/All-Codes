@@ -70,7 +70,63 @@ ll modexp(ll a, ll b, ll c)
     return ans;
 }
 
-const ll L = 1e5+5;
+const ll L = (1LL << 17) + 5;
+
+ll a[L];
+ll seg[4*L];
+
+ll merge(ll a, ll b, bool f)
+{
+    if(!f)
+    {
+        return a^b;
+    }
+
+    else
+    {
+        return a|b;
+    }
+}
+
+void build(ll pos, ll tl, ll tr, bool f)
+{
+    // cout << pos << " " << tl << " "  << tr << " " << f << endl;
+    if(tl == tr)
+    {
+        seg[pos] = a[tl];
+        return;
+    }
+
+    ll mid = tl + (tr-tl)/2;
+
+    build(2*pos, tl, mid, f^1);
+    build(2*pos+1, mid+1, tr, f^1);
+
+    seg[pos] = merge(seg[2*pos], seg[2*pos+1], f);
+}
+
+void update(ll pos, ll tl, ll tr, ll idx, ll val, bool f)
+{
+    if(tl == tr)
+    {
+        seg[pos] = val;
+        return;
+    }
+
+    ll mid = tl + (tr-tl)/2;
+
+    if(tl <= idx && idx <= mid)
+    {
+        update(2*pos, tl, mid, idx, val, f^1);
+    }
+
+    else
+    {
+        update(2*pos+1, mid+1, tr, idx, val, f^1);
+    }
+
+    seg[pos] = merge(seg[2*pos], seg[2*pos+1], f);
+}
 
 int main()
 {
@@ -79,6 +135,23 @@ int main()
 
     ll n, m;
     cin >> n >> m;
+
+    for(ll i=1; i<=(1LL << n); i++)
+    {
+        cin >> a[i];
+    }
+
+    build(1, 1, (1LL << n), n&1);
+
+    while(m--)
+    {
+        ll p, b;
+        cin >> p >> b;
+
+        update(1, 1, (1LL << n), p, b, n&1);
+
+        cout << seg[1] << endl;
+    }
 
     return 0;
 }
