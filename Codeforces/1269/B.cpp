@@ -111,7 +111,7 @@ int main()
 
     for(auto i: s)
     {
-        ll temp = i;
+        ll temp = (i+m)%m;
 
         vector <ll> ans;
         for(ll j=0; j<n; j++)
