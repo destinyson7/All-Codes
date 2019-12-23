@@ -1,19 +1,7 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
 typedef long long int ll;
-typedef unsigned long long int ull;
-
-#define pb push_back
-#define mp make_pair
-#define ff first
-#define ss second
-#define pii pair <int, int>
-#define pll pair <ll, ll>
-#define gcd __gcd
-#define all(a) a.begin(), a.end()
-#define sz(a) (ll)(a.size())
 #define endl "\n"
 
 const ll L = 1e5+5;
@@ -71,12 +59,10 @@ ll query(node* head, ll num)
     node* cur = head;
 
     ll ans = 0;
-    // ll max_xor = -1e15;
+
     for(ll i=31; i>=0; i--)
     {
         ll bit = (num>>i)&1;
-
-        // cout << bit << " ";
 
         if(bit)
         {
@@ -108,10 +94,7 @@ ll query(node* head, ll num)
                 cur = cur->left;
             }
         }
-
-        // cout << ans << endl;
     }
-    // cout << endl;
 
     return ans;
 }
@@ -139,17 +122,13 @@ int main()
         for(ll i=0; i<n; i++)
         {
             cin >> a[i];
-
             cur_xor^=a[i];
-
             head = insert(head, cur_xor);
-
             ans = max(ans, query(head, cur_xor));
         }
 
         cout << ans << endl;
     }
-    // cout << endl;
 
     return 0;
 }
