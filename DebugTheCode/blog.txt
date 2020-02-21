@@ -1,0 +1,14 @@
+Hello and welcome to the first edition of DeCode!
+
+The contest, as you might have guessed by its name, is a bit trickier than usual. You will be given a problem, which you are given as usual. However, this time, you are also given the editorial and a sample solution to the problem! Unfortunately, the catch here is that the solution doesn't work on certain input cases.
+
+Your job, as an aid to Alice, is to help her figure out on what test cases the sample solution fails, and also help her fix the sample solution.
+
+TODO: change to a certain theme about Alice stuck in Coderland.
+TODO: describe scoring
+TODO: Describe input format
+TODO: Describe example problem
+
+You will be given eight problems and two hours to solve them. The contest is held on 10th Feb 2020 at 9pm, so mark your calendars now!
+
+The contest is prepared by the brilliant minds at IIIT-H: , and tested by: . We hope you'll enjoy it. We'll post an editorial in this thread after the contest.
