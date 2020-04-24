@@ -79,51 +79,9 @@ ll nxt()
 
 const ll L = 1e5+5;
 
-void solve(ll tc)
+void solve()
 {
-    ll n = nxt();
-
-    vector <pair<pll, ll>> p;
-
-    vector <char> ans(n, '0');
-
-    for(ll i=0; i<n; i++)
-    {
-        ll s = nxt(), e = nxt();
-        p.pb(mp(mp(s, e), i));
-    }
-
-    sort(all(p));
-
-    ll ce = -1, je = -1;
-
-    for(ll i=0; i<n; i++)
-    {
-        if(ce <= p[i].ff.ff)
-        {
-            ans[p[i].ss] = 'C';
-            ce = p[i].ff.ss;
-        }
-
-        else if(je <= p[i].ff.ff)
-        {
-            ans[p[i].ss] = 'J';
-            je = p[i].ff.ss;
-        }
-
-        else
-        {
-            cout << "Case #" << tc << ": " << "IMPOSSIBLE" << endl;
-            return;
-        }
-    }
-
-    cout << "Case #" << tc << ": ";
-    for(auto i: ans)
-    {
-        cout << i;
-    }
-    cout << endl;
+    
 }
 
 int main()
@@ -134,9 +92,9 @@ int main()
     ll T = 1;
     T = nxt();
 
-    for(ll i=1; i<=T; i++)
+    while(T--)
     {
-        solve(i);
+        solve();
     }
 
     return 0;

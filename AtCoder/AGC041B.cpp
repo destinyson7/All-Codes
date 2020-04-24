@@ -79,51 +79,75 @@ ll nxt()
 
 const ll L = 1e5+5;
 
-void solve(ll tc)
+bool can(ll index, basic_string <ll> a, ll n, ll m, ll v, ll p)
 {
-    ll n = nxt();
-
-    vector <pair<pll, ll>> p;
-
-    vector <char> ans(n, '0');
-
-    for(ll i=0; i<n; i++)
+    if(v < p)
     {
-        ll s = nxt(), e = nxt();
-        p.pb(mp(mp(s, e), i));
-    }
-
-    sort(all(p));
-
-    ll ce = -1, je = -1;
-
-    for(ll i=0; i<n; i++)
-    {
-        if(ce <= p[i].ff.ff)
+        if(a[index] + m >= a[n-p])
         {
-            ans[p[i].ss] = 'C';
-            ce = p[i].ff.ss;
+            return true;
         }
 
-        else if(je <= p[i].ff.ff)
+        return false;
+    }
+
+    ll voted = m;
+
+    for(ll i=0; i<n; i++)
+    {
+        if(i == index)
         {
-            ans[p[i].ss] = 'J';
-            je = p[i].ff.ss;
+            continue;
+        }
+
+        if(i > n - p)
+        {
+            voted += m;
+        }
+
+        else if(a[i] > a[index] + m)
+        {
+            return false;
         }
 
         else
         {
-            cout << "Case #" << tc << ": " << "IMPOSSIBLE" << endl;
-            return;
+            voted += max(0LL, min(m, a[index] + m - a[i]));
         }
     }
 
-    cout << "Case #" << tc << ": ";
-    for(auto i: ans)
+    return (voted >= m*v);
+}
+
+void solve()
+{
+    ll n = nxt(), m = nxt(), v = nxt(), p = nxt();
+    basic_string <ll> a(n, 0);
+    generate(all(a), nxt);
+    sort(all(a));
+
+    ll low = 0, high = n;
+    ll ans = -1;
+
+    while(low <= high)
     {
-        cout << i;
+        ll mid = low + (high - low)/2;
+
+        if(can(mid, a, n, m, v, p))
+        {
+            ans = mid;
+            high = mid-1;
+        }
+
+        else
+        {
+            low = mid + 1;
+        }
     }
-    cout << endl;
+
+    assert(ans != -1);
+
+    cout << n - ans << endl;
 }
 
 int main()
@@ -132,11 +156,11 @@ int main()
     cin.tie(NULL); cout.tie(NULL);
     
     ll T = 1;
-    T = nxt();
+    // T = nxt();
 
-    for(ll i=1; i<=T; i++)
+    while(T--)
     {
-        solve(i);
+        solve();
     }
 
     return 0;

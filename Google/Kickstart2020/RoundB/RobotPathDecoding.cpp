@@ -78,52 +78,109 @@ ll nxt()
 }
 
 const ll L = 1e5+5;
+const ll mod = 1e9;
 
-void solve(ll tc)
+ll add(ll x, ll y)
 {
-    ll n = nxt();
+    return ((x + y)%mod + mod)%mod;
+}
 
-    vector <pair<pll, ll>> p;
+void solve()
+{
+    string s;
+    cin >> s;
 
-    vector <char> ans(n, '0');
+    ll n = sz(s);
 
-    for(ll i=0; i<n; i++)
-    {
-        ll s = nxt(), e = nxt();
-        p.pb(mp(mp(s, e), i));
-    }
-
-    sort(all(p));
-
-    ll ce = -1, je = -1;
+    stack <pair<ll, vector<ll>>> v;
+    v.push(mp(1, vector<ll>(2, 0)));
 
     for(ll i=0; i<n; i++)
     {
-        if(ce <= p[i].ff.ff)
+        if(s[i] == '(')
         {
-            ans[p[i].ss] = 'C';
-            ce = p[i].ff.ss;
+            v.push(mp(s[i-1]-48, vector<ll>(2, 0)));
         }
 
-        else if(je <= p[i].ff.ff)
+        else if(s[i] == ')')
         {
-            ans[p[i].ss] = 'J';
-            je = p[i].ff.ss;
+            pair<ll, vector<ll>> top = v.top();
+            v.pop();
+
+            pair<ll, vector<ll>> next = v.top();
+            v.pop();
+
+            next.ss[0] = add(next.ss[0], (top.ff*top.ss[0]));
+            next.ss[1] = add(next.ss[1], (top.ff*top.ss[1]));
+
+            v.push(next);
         }
 
-        else
+        else if(s[i] == 'N')
         {
-            cout << "Case #" << tc << ": " << "IMPOSSIBLE" << endl;
-            return;
+            pair<ll, vector<ll>> top = v.top();
+            v.pop();
+
+            top.ss[0] = add(top.ss[0], -1);
+            v.push(top);
+        }
+
+        else if(s[i] == 'S')
+        {
+            pair<ll, vector<ll>> top = v.top();
+            v.pop();
+
+            top.ss[0] = add(top.ss[0], 1);
+            v.push(top);
+        }
+
+        else if(s[i] == 'E')
+        {
+            pair<ll, vector<ll>> top = v.top();
+            v.pop();
+
+            top.ss[1] = add(top.ss[1], 1);
+            v.push(top);
+        }
+
+        else if(s[i] == 'W')
+        {
+            pair<ll, vector<ll>> top = v.top();
+            v.pop();
+
+            top.ss[1] = add(top.ss[1], -1);
+            v.push(top);
         }
     }
 
-    cout << "Case #" << tc << ": ";
-    for(auto i: ans)
+    assert(sz(v) == 1);
+    
+    vector <ll> pos = v.top().ss;
+    
+    ll x = ((pos[1]%mod) + mod)%mod;
+    ll y = ((pos[0]%mod) + mod)%mod;
+    
+    if(x == (ll)1e9)
     {
-        cout << i;
+        x = 1;
     }
-    cout << endl;
+    
+    else
+    {
+        x++;
+    }
+    
+    if(y == (ll)1e9)
+    {
+        y = 1;
+    }
+    
+    else
+    {
+        y++;
+    }
+
+    cout << x << " " << y << endl;
 }
 
 int main()
@@ -136,7 +193,8 @@ int main()
 
     for(ll i=1; i<=T; i++)
     {
-        solve(i);
+        cout << "Case #" << i << ": ";
+        solve();
     }
 
     return 0;

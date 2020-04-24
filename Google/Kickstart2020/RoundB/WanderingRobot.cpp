@@ -77,53 +77,68 @@ ll nxt()
     return x;
 }
 
-const ll L = 1e5+5;
+const ll L = 3e2+5;
+double dp[L][L];
+bool good[L][L];
 
-void solve(ll tc)
+ll w, h, l, u, r, d;
+
+double cal(ll i, ll j)
 {
-    ll n = nxt();
-
-    vector <pair<pll, ll>> p;
-
-    vector <char> ans(n, '0');
-
-    for(ll i=0; i<n; i++)
+    if(dp[i][j] > -0.5)
     {
-        ll s = nxt(), e = nxt();
-        p.pb(mp(mp(s, e), i));
+        return dp[i][j];
     }
 
-    sort(all(p));
-
-    ll ce = -1, je = -1;
-
-    for(ll i=0; i<n; i++)
+    if(!good[i][j])
     {
-        if(ce <= p[i].ff.ff)
-        {
-            ans[p[i].ss] = 'C';
-            ce = p[i].ff.ss;
-        }
+        return 0;
+    }
 
-        else if(je <= p[i].ff.ff)
-        {
-            ans[p[i].ss] = 'J';
-            je = p[i].ff.ss;
-        }
+    if(i == h - 1)
+    {
+        dp[i][j] = cal(i, j+1);
+    }
 
-        else
+    else if(j == w - 1)
+    {
+        dp[i][j] = cal(i+1, j);
+    }
+
+    else
+    {
+        dp[i][j] = 0.5 * cal(i+1, j) + 0.5 * cal(i, j+1);
+    }
+
+    // cout << i << " " << j << " " << dp[i][j] << endl;
+
+    return dp[i][j];
+}
+
+void solve()
+{
+    cin >> w >> h >> l >> u >> r >> d;
+
+    for(ll i=0; i<=h; i++)
+    {
+        for(ll j=0; j<=w; j++)
         {
-            cout << "Case #" << tc << ": " << "IMPOSSIBLE" << endl;
-            return;
+            dp[i][j] = (double)(-1.0);
+            good[i][j] = true;
         }
     }
 
-    cout << "Case #" << tc << ": ";
-    for(auto i: ans)
+    for(ll i=u-1; i<d; i++)
     {
-        cout << i;
+        for(ll j=l-1; j<r; j++)
+        {
+            good[i][j] = false;
+        }
     }
-    cout << endl;
+
+    dp[h-1][w-1] = (double)1.0;
+
+    cout << fixed << setprecision(7) << cal(0, 0) << endl;
 }
 
 int main()
@@ -136,7 +151,8 @@ int main()
 
     for(ll i=1; i<=T; i++)
     {
-        solve(i);
+        cout << "Case #" << i << ": ";
+        solve();
     }
 
     return 0;
