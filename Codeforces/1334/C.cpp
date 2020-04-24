@@ -98,7 +98,7 @@ void solve()
         req += max(0LL, a[(i+1)%n] - b[i]);
     }
 
-    ll ans = 1e15;
+    ll ans = 1e18;
 
     for(ll i=0; i<n; i++)
     {
