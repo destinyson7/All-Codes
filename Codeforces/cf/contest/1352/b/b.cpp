@@ -79,32 +79,76 @@ ll nxt()
 
 const ll L = 1e5+5;
 
-ll C2(ll n)
-{
-    return (n * (n - 1))/2;
-}
-
 void solve()
 {
-    ll n = nxt(), d = nxt();
-    basic_string <ll> x(n, 0);
-    generate(all(x), nxt);
+    ll n = nxt(), k = nxt();
 
-    if(n < 3)
+    if(n & 1)
     {
-        cout << 0 << endl;
-        return;
+        if(k & 1)
+        {
+            if(k > n)
+            {
+                cout << "NO" << endl;
+            }
+
+            else
+            {
+                cout << "YES" << endl;
+                for(ll i=1; i<k; i++)
+                {
+                    cout << 1 << " ";
+                }
+                cout << n-k+1 << endl;
+            }
+        }
+
+        else
+        {
+            cout << "NO" << endl;
+        }
     }
 
-    ll ans = 0;
-
-    for(ll i=0; i<n - 1; i++)
+    else
     {
-        ans += C2(upper_bound(all(x), x[i] + d) - x.begin() - i - 1);
-        // cout << ans << endl;
-    }
+        if(k & 1)
+        {
+            if(2 * k > n)
+            {
+                cout << "NO" << endl;
+            }
 
-    cout << ans << endl;
+            else
+            {
+                cout << "YES" << endl;
+                for(ll i=1; i<k; i++)
+                {
+                    cout << 2 << " ";
+                }
+
+                cout << n - (k - 1) * 2 << endl;
+            }
+        }
+        
+        else 
+        {
+            if(k > n)
+            {
+                cout << "NO" << endl;
+            }
+
+            else
+            {
+                cout << "YES" << endl;
+                for(ll i=1; i<k; i++)
+                {
+                    cout << 1 << " ";
+                }
+
+                cout << n - k + 1 << endl;
+            }
+        }
+    }
 }
 
 int main()
@@ -113,7 +157,7 @@ int main()
     cin.tie(NULL); cout.tie(NULL);
     
     ll T = 1;
-    // T = nxt();
+    T = nxt();
 
     while(T--)
     {

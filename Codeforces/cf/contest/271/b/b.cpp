@@ -77,31 +77,71 @@ ll nxt()
     return x;
 }
 
-const ll L = 1e5+5;
+const ll L = 2e5+5;
 
-ll C2(ll n)
+vector <ll> primes;
+vector <bool> isPrime(L, true);
+
+const ll M = 5e2 + 5;
+ll mat[M][M];
+
+void sieve()
 {
-    return (n * (n - 1))/2;
+    isPrime[0] = false;
+    isPrime[1] = false;
+
+    for(ll i=2; i<L; i++)
+    {
+        if(isPrime[i])
+        {
+            primes.pb(i);
+
+            for(ll j=2*i; j<L; j+=i)
+            {
+                isPrime[j] = false;
+            }
+        }
+    }
 }
 
 void solve()
 {
-    ll n = nxt(), d = nxt();
-    basic_string <ll> x(n, 0);
-    generate(all(x), nxt);
+    sieve();
 
-    if(n < 3)
+    ll n = nxt(), m = nxt();
+
+    for(ll i=0; i<n; i++)
     {
-        cout << 0 << endl;
-        return;
+        for(ll j=0; j<m; j++)
+        {
+            cin >> mat[i][j];
+        }
     }
 
-    ll ans = 0;
+    ll ans = 1e18;
 
-    for(ll i=0; i<n - 1; i++)
+    for(ll i=0; i<n; i++)
     {
-        ans += C2(upper_bound(all(x), x[i] + d) - x.begin() - i - 1);
-        // cout << ans << endl;
+        ll cur = 0;
+
+        for(ll j=0; j<m; j++)
+        {
+            cur += *lower_bound(all(primes), mat[i][j]) - mat[i][j];
+        }
+
+        ans = min(ans, cur);
+    }
+
+    for(ll j=0; j<m; j++)
+    {
+        ll cur = 0;
+
+        for(ll i=0; i<n; i++)
+        {
+            cur += *lower_bound(all(primes), mat[i][j]) - mat[i][j];
+        }
+
+        ans = min(ans, cur);
     }
 
     cout << ans << endl;

@@ -78,33 +78,49 @@ ll nxt()
 }
 
 const ll L = 1e5+5;
-
-ll C2(ll n)
-{
-    return (n * (n - 1))/2;
-}
+const ll mod = 1e9+7;
 
 void solve()
 {
-    ll n = nxt(), d = nxt();
-    basic_string <ll> x(n, 0);
-    generate(all(x), nxt);
+    ll x = nxt(), y = nxt();
 
-    if(n < 3)
+    ll n = nxt();
+
+    n %= 6;
+
+    if(n == 0)
     {
-        cout << 0 << endl;
-        return;
+        cout << ((x - y)%mod + mod)%mod << endl;
     }
 
-    ll ans = 0;
-
-    for(ll i=0; i<n - 1; i++)
+    else if(n == 1)
     {
-        ans += C2(upper_bound(all(x), x[i] + d) - x.begin() - i - 1);
-        // cout << ans << endl;
+        cout << ((x)%mod + mod)%mod << endl;
     }
 
-    cout << ans << endl;
+    else if(n == 2)
+    {
+        
+        cout << ((y)%mod + mod)%mod << endl;
+    }
+
+    else if(n == 3)
+    {
+        
+        cout << ((y-x)%mod + mod)%mod << endl;
+    }
+
+    else if(n == 4)
+    {
+        cout << ((-x)%mod + mod)%mod << endl;
+        
+    }
+
+    else if(n == 5)
+    {
+        cout << ((-y)%mod + mod)%mod << endl;
+    }
+
 }
 
 int main()

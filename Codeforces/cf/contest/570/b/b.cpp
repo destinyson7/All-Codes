@@ -79,32 +79,19 @@ ll nxt()
 
 const ll L = 1e5+5;
 
-ll C2(ll n)
-{
-    return (n * (n - 1))/2;
-}
-
 void solve()
 {
-    ll n = nxt(), d = nxt();
-    basic_string <ll> x(n, 0);
-    generate(all(x), nxt);
+    ll n = nxt(), m = nxt();
 
-    if(n < 3)
+    if(n - m > m - 1) 
     {
-        cout << 0 << endl;
-        return;
+        cout << min(m + 1, n) << endl;
     }
 
-    ll ans = 0;
-
-    for(ll i=0; i<n - 1; i++)
+    else 
     {
-        ans += C2(upper_bound(all(x), x[i] + d) - x.begin() - i - 1);
-        // cout << ans << endl;
+        cout << max(1LL, m - 1) << endl;
     }
-
-    cout << ans << endl;
 }
 
 int main()

@@ -79,32 +79,33 @@ ll nxt()
 
 const ll L = 1e5+5;
 
-ll C2(ll n)
-{
-    return (n * (n - 1))/2;
-}
-
 void solve()
 {
-    ll n = nxt(), d = nxt();
-    basic_string <ll> x(n, 0);
-    generate(all(x), nxt);
+    ll n = nxt();
 
-    if(n < 3)
+    ll pot = 1;
+
+    vector <ll> ans;
+
+    while(n)
     {
-        cout << 0 << endl;
-        return;
+        if(n%10)
+        {
+            ans.pb((n%10) * pot);
+            // cout << (n%10) * pot << " ";
+        }
+
+        pot *= 10;
+
+        n/=10;
     }
 
-    ll ans = 0;
-
-    for(ll i=0; i<n - 1; i++)
+    cout << sz(ans) << endl;
+    for(auto i: ans)
     {
-        ans += C2(upper_bound(all(x), x[i] + d) - x.begin() - i - 1);
-        // cout << ans << endl;
+        cout << i << " ";
     }
-
-    cout << ans << endl;
+    cout << endl;
 }
 
 int main()
@@ -113,7 +114,7 @@ int main()
     cin.tie(NULL); cout.tie(NULL);
     
     ll T = 1;
-    // T = nxt();
+    T = nxt();
 
     while(T--)
     {

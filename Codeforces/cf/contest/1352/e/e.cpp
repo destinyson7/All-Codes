@@ -5,7 +5,7 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-typedef long long int ll;
+typedef int ll;
 typedef unsigned long long int ull;
 typedef long double ld;
 typedef pair <ll, ll> pll;
@@ -79,29 +79,37 @@ ll nxt()
 
 const ll L = 1e5+5;
 
-ll C2(ll n)
-{
-    return (n * (n - 1))/2;
-}
-
 void solve()
 {
-    ll n = nxt(), d = nxt();
-    basic_string <ll> x(n, 0);
-    generate(all(x), nxt);
+    ll n = nxt();
+    basic_string <ll> a(n, 0);
+    generate(all(a), nxt);
 
-    if(n < 3)
+    basic_string <ll> cnt(n+1, 0);
+
+    for(ll i=0; i<n; i++)
     {
-        cout << 0 << endl;
-        return;
+        cnt[a[i]]++;
     }
 
     ll ans = 0;
 
-    for(ll i=0; i<n - 1; i++)
+    for(ll i=0; i<n; i++)
     {
-        ans += C2(upper_bound(all(x), x[i] + d) - x.begin() - i - 1);
-        // cout << ans << endl;
+        ll cur = a[i];
+
+        for(ll j=i+1; j<n; j++)
+        {
+            cur += a[j];
+
+            if(cur <= n)
+            {
+                ans += cnt[cur];
+                cnt[cur] = 0;
+            }
+
+            // cout << i << " " << j << " " << ans << endl;
+        }
     }
 
     cout << ans << endl;
@@ -113,7 +121,7 @@ int main()
     cin.tie(NULL); cout.tie(NULL);
     
     ll T = 1;
-    // T = nxt();
+    T = nxt();
 
     while(T--)
     {

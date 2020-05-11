@@ -79,32 +79,48 @@ ll nxt()
 
 const ll L = 1e5+5;
 
-ll C2(ll n)
-{
-    return (n * (n - 1))/2;
-}
-
 void solve()
 {
-    ll n = nxt(), d = nxt();
-    basic_string <ll> x(n, 0);
-    generate(all(x), nxt);
+    ll n = nxt();
 
-    if(n < 3)
+    deque <ll> q;
+
+    for(ll i=0; i<n; i++)
     {
-        cout << 0 << endl;
-        return;
+        q.pb(nxt());
     }
 
-    ll ans = 0;
+    ll a = 0, b = 0, moves = 0;
+    ll ate = 0;
+    ll move = 0;
 
-    for(ll i=0; i<n - 1; i++)
+    while(!q.empty())
     {
-        ans += C2(upper_bound(all(x), x[i] + d) - x.begin() - i - 1);
-        // cout << ans << endl;
+        ll cur = 0;
+
+        while(!q.empty() && cur <= ate)
+        {
+            if(move & 1)
+            {
+                cur += q.back();
+                b += q.back();
+                q.pop_back();
+            }
+
+            else
+            {
+                cur += q.front();
+                a += q.front();
+                q.pop_front();
+            }
+        }
+
+        ate = cur;
+        move ^= 1;
+        moves++;
     }
 
-    cout << ans << endl;
+    cout << moves << " " << a << " " << b << endl;
 }
 
 int main()
@@ -113,7 +129,7 @@ int main()
     cin.tie(NULL); cout.tie(NULL);
     
     ll T = 1;
-    // T = nxt();
+    T = nxt();
 
     while(T--)
     {

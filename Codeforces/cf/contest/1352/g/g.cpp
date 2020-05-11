@@ -79,32 +79,39 @@ ll nxt()
 
 const ll L = 1e5+5;
 
-ll C2(ll n)
-{
-    return (n * (n - 1))/2;
-}
-
 void solve()
 {
-    ll n = nxt(), d = nxt();
-    basic_string <ll> x(n, 0);
-    generate(all(x), nxt);
+    ll n = nxt();
 
-    if(n < 3)
+    if(n < 4)
     {
-        cout << 0 << endl;
+        cout << "-1" << endl;
         return;
     }
 
-    ll ans = 0;
+    deque <ll> q;
 
-    for(ll i=0; i<n - 1; i++)
+    q.pb(2);
+    q.pb(4);
+    q.pb(1);
+    q.pb(3);
+
+    for(ll i=6; i<=n; i+=2)
     {
-        ans += C2(upper_bound(all(x), x[i] + d) - x.begin() - i - 1);
-        // cout << ans << endl;
+        q.push_front(i);
     }
 
-    cout << ans << endl;
+    for(ll i=5; i<=n; i+=2)
+    {
+        q.pb(i);
+    }
+
+    while(!q.empty())
+    {
+        cout << q.front() << " ";
+        q.pop_front();
+    }
+    cout << endl;
 }
 
 int main()
@@ -113,7 +120,7 @@ int main()
     cin.tie(NULL); cout.tie(NULL);
     
     ll T = 1;
-    // T = nxt();
+    T = nxt();
 
     while(T--)
     {
