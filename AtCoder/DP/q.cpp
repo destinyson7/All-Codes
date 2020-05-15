@@ -77,44 +77,84 @@ ll nxt()
     return x;
 }
 
-const ll L = 21;
-const ll mod = 1e9 + 7;
+const ll L = 2e5+5;
 
-ll a[L][L];
+ll seg[4*L];
+ll h[L], a[L];
+ll dp[L];
+
+ll merge(ll a, ll b)
+{
+    return max(a, b);
+}
+
+void update(ll pos, ll tl, ll tr, ll idx, ll val)
+{
+    if(tl == tr)
+    {
+        seg[pos] = val;        
+        return;
+    }
+
+    ll mid = tl + (tr - tl)/2;
+
+    if(tl <= idx && idx <= mid)
+    {
+        update(2*pos, tl, mid, idx, val);
+    }
+
+    else
+    {
+        update(2*pos+1, mid+1, tr, idx, val);
+    }
+
+    seg[pos] = merge(seg[2*pos], seg[2*pos+1]);
+}
+
+ll query(ll pos, ll tl, ll tr, ll l, ll r)
+{
+    if(tl > r || tr < l)
+    {
+        return 0;
+    }
+
+    if(tl >= l && tr <= r)
+    {
+        return seg[pos];
+    }
+
+    ll mid = tl + (tr-tl)/2;
+
+    return merge(query(2*pos, tl, mid, l, r), query(2*pos+1, mid+1, tr, l, r));
+}
 
 void solve()
 {
-    ll n = nxt();   
-
-    vector <ll> dp((1LL << n), 0);
+    ll n = nxt();    
 
     for(ll i=0; i<n; i++)
     {
-        for(ll j=0; j<n; j++)
-        {
-            cin >> a[i][j];
-        }
+        cin >> h[i];
     }
 
-    dp[0] = 1;
-
-    // dp[mask] represents the number of ways to pair the subset of women with men
-
-    for(ll mask = 0; mask < (1LL << n); mask++)
+    for(ll i=0; i<n; i++)
     {
-        ll man = __builtin_popcountll(mask);
-
-        for(ll i = 0; i < n; i++)
-        {
-            if(mask & (1LL << i) && a[man-1][i])
-            {
-                dp[mask] += dp[mask & ~(1LL << i)];
-                dp[mask] %= mod;
-            }
-        }
+        cin >> a[i];
     }
 
-    cout << dp[(1LL << n) - 1] << endl;
+    // dp[i] represents the maximum value we can get if the last taken flower has height i
+
+    for(ll i=0; i<n; i++)
+    {
+        ll best = query(1, 1, n+1, 1, h[i]);
+        dp[h[i]] = best + a[i];
+
+        update(1, 1, n+1, h[i]+1, dp[h[i]]);
+
+        // cout << dp[h[i]] << endl;
+    }
+
+    cout << query(1, 1, n+1, 1, n+1) << endl;
 }
 
 int main()

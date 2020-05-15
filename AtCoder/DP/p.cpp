@@ -77,44 +77,68 @@ ll nxt()
     return x;
 }
 
-const ll L = 21;
+const ll L = 1e5+5;
 const ll mod = 1e9 + 7;
 
-ll a[L][L];
+vector <ll> adj[L];
+ll dp[L][2];
 
-void solve()
+// col = 1 implies black else white
+
+void dfs(ll src, ll par, ll col)
 {
-    ll n = nxt();   
-
-    vector <ll> dp((1LL << n), 0);
-
-    for(ll i=0; i<n; i++)
+    if(dp[src][col] != -1)
     {
-        for(ll j=0; j<n; j++)
-        {
-            cin >> a[i][j];
-        }
+        return;
     }
 
-    dp[0] = 1;
+    dp[src][col] = 1;
 
-    // dp[mask] represents the number of ways to pair the subset of women with men
-
-    for(ll mask = 0; mask < (1LL << n); mask++)
+    for(auto i: adj[src])
     {
-        ll man = __builtin_popcountll(mask);
-
-        for(ll i = 0; i < n; i++)
+        if(i != par)
         {
-            if(mask & (1LL << i) && a[man-1][i])
+            if(col)
             {
-                dp[mask] += dp[mask & ~(1LL << i)];
-                dp[mask] %= mod;
+                dfs(i, src, col^1);
+
+                dp[src][col] *= dp[i][col^1];
+                dp[src][col] %= mod;
+            }
+
+            else
+            {
+                dfs(i, src, col);
+                dfs(i, src, col^1);
+                dp[src][col] *= ((dp[i][col] + dp[i][col^1])%mod);
+                dp[src][col] %= mod;
             }
         }
     }
+}
 
-    cout << dp[(1LL << n) - 1] << endl;
+void solve()
+{
+    ll n = nxt();
+
+    for(ll i=0; i<=n; i++)
+    {
+        dp[i][0] = -1;
+        dp[i][1] = -1;
+    }
+
+    for(ll i=0; i<n-1; i++)
+    {
+        ll u = nxt() - 1, v = nxt() - 1;
+
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }   
+
+    dfs(0, -1, 0);
+    dfs(0, -1, 1);
+
+    cout << (dp[0][0] + dp[0][1])%mod << endl;
 }
 
 int main()

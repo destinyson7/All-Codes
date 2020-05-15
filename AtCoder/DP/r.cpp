@@ -77,44 +77,100 @@ ll nxt()
     return x;
 }
 
-const ll L = 21;
+const ll L = 50+5;
 const ll mod = 1e9 + 7;
 
-ll a[L][L];
+typedef struct Matrix {
+    ll mat[L][L];
+} matrix;
+
+matrix multiply(matrix A, matrix B, ll mod)
+{
+    Matrix ans;
+
+    for(ll i=0; i<L; i++)
+    {
+        for(ll j=0; j<L; j++)
+        {
+            ans.mat[i][j] = 0;
+
+            for(ll k=0; k<L; k++)
+            {
+                ans.mat[i][j] += ((A.mat[i][k] * B.mat[k][j])%mod);
+                ans.mat[i][j] %= mod;
+            }
+        }
+    }
+
+    return ans;
+}
+
+matrix identity()
+{
+    matrix ans;
+
+    for(ll i=0; i<L; i++)
+    {
+        for(ll j=0; j<L; j++)
+        {
+            ans.mat[i][j] = 0;
+
+            if(i == j)
+            {
+                ans.mat[i][j]++;
+            }
+        }
+    }
+
+    return ans;
+}
+
+matrix modexp(matrix A, ll b, ll mod)
+{
+    matrix ans = identity();
+
+    while(b)
+    {
+        if(b & 1)
+        {
+            ans = multiply(ans, A, mod);
+        }
+
+        A = multiply(A, A, mod);
+        b >>= 1;
+    }
+
+    return ans;
+}
 
 void solve()
 {
-    ll n = nxt();   
+    ll n = nxt(), k = nxt();
 
-    vector <ll> dp((1LL << n), 0);
+    matrix a;
 
     for(ll i=0; i<n; i++)
     {
         for(ll j=0; j<n; j++)
         {
-            cin >> a[i][j];
+            cin >> a.mat[i][j];
         }
     }
 
-    dp[0] = 1;
+    matrix ans = modexp(a, k, mod);
 
-    // dp[mask] represents the number of ways to pair the subset of women with men
+    ll total = 0;
 
-    for(ll mask = 0; mask < (1LL << n); mask++)
+    for(ll i=0; i<n; i++)
     {
-        ll man = __builtin_popcountll(mask);
-
-        for(ll i = 0; i < n; i++)
+        for(ll j=0; j<n; j++)
         {
-            if(mask & (1LL << i) && a[man-1][i])
-            {
-                dp[mask] += dp[mask & ~(1LL << i)];
-                dp[mask] %= mod;
-            }
+            total += ans.mat[i][j];
+            total %= mod;
         }
     }
 
-    cout << dp[(1LL << n) - 1] << endl;
+    cout << total << endl;
 }
 
 int main()
