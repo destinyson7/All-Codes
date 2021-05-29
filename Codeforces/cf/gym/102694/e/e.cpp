@@ -77,11 +77,141 @@ ll nxt()
     return x;
 }
 
-const ll L = 1e5+5;
+const ll L = 3e5+5;
+
+vector <ll> adj[L];
+ll arr[L];
+ll dep[L];
+double seg[4 * L];
+double a[L];
+
+ll timer = 1;
+
+double merge(double aa, double bb)
+{
+    return aa + bb;
+}
+
+void build(ll pos, ll tl, ll tr)
+{
+    // cout << pos << " " << tl << " "  << tr << " " << f << endl;
+    if(tl == tr)
+    {
+        seg[pos] = a[tl];
+        return;
+    }
+
+    ll mid = tl + (tr-tl)/2;
+
+    build(2*pos, tl, mid);
+    build(2*pos+1, mid+1, tr);
+
+    seg[pos] = merge(seg[2*pos], seg[2*pos+1]);
+}
+
+void update(ll pos, ll tl, ll tr, ll idx, double val)
+{
+    if(tl == tr)
+    {
+        seg[pos] = val;
+        return;
+    }
+
+    ll mid = tl + (tr-tl)/2;
+
+    if(tl <= idx && idx <= mid)
+    {
+        update(2*pos, tl, mid, idx, val);
+    }
+
+    else
+    {
+        update(2*pos+1, mid+1, tr, idx, val);
+    }
+
+    seg[pos] = merge(seg[2*pos], seg[2*pos+1]);
+}
+
+double query(ll pos, ll tl, ll tr, ll l, ll r)
+{
+    if(tl > r || tr < l)
+    {
+        return 0;
+    }
+
+    if(tl >= l && tr <= r)
+    {
+        return seg[pos];
+    }
+
+    ll mid = tl + (tr-tl)/2;
+
+    return merge(query(2*pos, tl, mid, l, r), query(2*pos+1, mid+1, tr, l, r));
+}
+
+void dfs(ll s, ll par)
+{
+    arr[s] = timer;
+
+    for(auto i: adj[s])
+    {
+        if(i != par)
+        {
+            timer++;
+            dfs(i, s);
+        }
+    }
+
+    dep[s] = timer;
+}
 
 void solve()
 {
+    ll n = nxt();
+    ll m = n - 1;
 
+    for(ll i = 0; i < m; i++)
+    {
+        ll u = nxt(), v = nxt();
+
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }
+
+    dfs(1, 1);
+    build(1, 1, n);
+
+    ll q = nxt();
+
+    double logma = log(1e9);
+
+    while(q--)
+    {
+        ll t = nxt(), x = nxt(), y = nxt();
+
+        if(t == 1)
+        {
+            update(1, 1, n, arr[x], (double)log(y));
+        }
+
+        else
+        {
+            double ff = query(1, 1, n, arr[x], dep[x]);
+            double ss = query(1, 1, n, arr[y], dep[y]);
+
+            // cout << ff << " "  << ss << endl;
+
+            if(ff - ss > logma)
+            {
+                cout << fixed << setprecision(10) << 1e9 << endl;
+            }
+
+            else
+            {
+                cout << fixed << setprecision(10) << exp(ff - ss) << endl;
+            }
+        }
+    }
 }
 
 int main()
@@ -90,7 +220,7 @@ int main()
     cin.tie(NULL); cout.tie(NULL);
 
     ll T = 1;
-    T = nxt();
+    // T = nxt();
 
     while(T--)
     {

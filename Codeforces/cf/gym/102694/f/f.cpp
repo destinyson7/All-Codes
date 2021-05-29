@@ -79,9 +79,167 @@ ll nxt()
 
 const ll L = 1e5+5;
 
+vector <ll> adj[L];
+ll arr[L];
+ll dep[L];
+ll seg[4 * L];
+ll a[L];
+
+ll timer = 1;
+
+ll merge(ll aa, ll bb)
+{
+    return aa + bb;
+}
+
+void build(ll pos, ll tl, ll tr)
+{
+    // cout << pos << " " << tl << " "  << tr << " " << f << endl;
+    if(tl == tr)
+    {
+        seg[pos] = a[tl];
+        return;
+    }
+
+    ll mid = tl + (tr-tl)/2;
+
+    build(2*pos, tl, mid);
+    build(2*pos+1, mid+1, tr);
+
+    seg[pos] = merge(seg[2*pos], seg[2*pos+1]);
+}
+
+void update(ll pos, ll tl, ll tr, ll idx, ll val)
+{
+    if(tl == tr)
+    {
+        seg[pos] += val;
+        return;
+    }
+
+    ll mid = tl + (tr-tl)/2;
+
+    if(tl <= idx && idx <= mid)
+    {
+        update(2*pos, tl, mid, idx, val);
+    }
+
+    else
+    {
+        update(2*pos+1, mid+1, tr, idx, val);
+    }
+
+    seg[pos] = merge(seg[2*pos], seg[2*pos+1]);
+}
+
+ll query(ll pos, ll tl, ll tr, ll l, ll r)
+{
+    if(tl > r || tr < l)
+    {
+        return 0;
+    }
+
+    if(tl >= l && tr <= r)
+    {
+        return seg[pos];
+    }
+
+    ll mid = tl + (tr-tl)/2;
+
+    return merge(query(2*pos, tl, mid, l, r), query(2*pos+1, mid+1, tr, l, r));
+}
+
+ll level[L];
+
+void dfs(ll s, ll par)
+{
+    arr[s] = timer;
+
+    if(par != s)
+    {
+        level[s] = level[par] + 1;
+    }
+
+    for(auto i: adj[s])
+    {
+        if(i != par)
+        {
+            timer++;
+            dfs(i, s);
+        }
+    }
+
+    dep[s] = timer;
+}
+
 void solve()
 {
+    ll n = nxt(), q = nxt();
+    ll m = n - 1;
 
+    timer = 1;
+
+    for(ll i = 0; i <= n; i++)
+    {
+        a[i] = 0;
+        // seg[i] = 0;
+        arr[i] = 0;
+        dep[i] = 0;
+        adj[i].clear();
+    }
+
+    // for(ll i = n + 1; i <= 4 * n; i++)
+    // {
+    //     seg[i] = 0;
+    // }
+
+    for(ll i = 0; i < m; i++)
+    {
+        ll u = nxt(), v = nxt();
+
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }
+
+    dfs(1, 1);
+    build(1, 1, n);
+
+    // for(ll i = 1; i <= n; i++)
+    // {
+    //     cout << level[i] << " " << arr[i] << " " << dep[i] << endl;
+    // }
+
+    while(q--)
+    {
+        ll ff = nxt(), ss = nxt(), x = nxt();
+
+        if(x > 0)
+        {
+            update(1, 1, n, arr[ff], x);
+            update(1, 1, n, arr[ss], -x);
+
+            // for(ll i = 1; i <= 4 * n; i++)
+            // {
+            //     cout << q << " * " << seg[i] << endl;
+            // }
+        }
+
+        else
+        {
+            // cout << "queries: " << query(1, 1, n, arr[ff], dep[ff]) << " " << query(1, 1, n, arr[ss], dep[ss]) << endl;
+
+            if(level[ff] > level[ss])
+            {
+                // cout << "**" << endl;
+                cout << abs(query(1, 1, n, arr[ff], dep[ff])) << endl;
+            }
+
+            else
+            {
+                cout << abs(query(1, 1, n, arr[ss], dep[ss])) << endl;
+            }
+        }
+    }
 }
 
 int main()
