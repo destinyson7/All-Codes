@@ -79,15 +79,85 @@ ll nxt()
 
 const ll L = 1e5+5;
 
+vector <ll> z_function(string s)
+{
+    ll n = sz(s);
+    vector <ll> z(n, 0);
+
+    ll l = 0, r = 0;
+    for(ll i = 1; i < n; i++)
+    {
+        if(i <= r)
+        {
+            z[i] = min(z[i - l], r - i + 1);
+        }
+
+        while(i + z[i] < n && s[z[i]] == s[i + z[i]])
+        {
+            z[i]++;
+        }
+
+        if(i + z[i] - 1 > r)
+        {
+            l = i;
+            r = i + z[i] - 1;
+        }
+    }
+
+    return z;
+}
+
 void solve()
 {
-    map <int, int> a;
-    int ans = 0;
-    ans += a[0];
-    a[1] = 2;
-    ans += a[1];
+    string s;
+    cin >> s;
 
-    cout << ans << endl;
+    ll n = sz(s);
+
+    vector <ll> z = z_function(s);
+    z[0] = n;
+
+    set <ll> matching_z;
+    map <ll, ll> freq;
+
+    for(ll i = 0; i < n; i++)
+    {
+        // cout << i << " " << z[i] << endl;
+
+        if(i + z[i] == n)
+        {
+            // cout << "*" << endl;
+            matching_z.insert(z[i]);
+        }
+
+        freq[z[i]]++;
+    }
+
+    vector <pll> pref_sum;
+
+    for(auto i: freq)
+    {
+        pref_sum.pb(i);
+    }
+
+    pref_sum.pb(mp(0, 0));
+
+    ll len = sz(pref_sum);
+
+    map <ll, ll> new_freq;
+
+    for(ll i = len - 2; i >= 0; i--)
+    {
+        pref_sum[i].ss += pref_sum[i + 1].ss;
+        new_freq[pref_sum[i].ff] = pref_sum[i].ss;
+    }
+
+    cout << sz(matching_z) << endl;
+
+    for(auto i: matching_z)
+    {
+        cout << i << " " << new_freq[i] << endl;
+    }
 }
 
 int main()
