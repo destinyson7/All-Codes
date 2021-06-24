@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
- 
+
 using namespace __gnu_pbds;
 using namespace std;
 
@@ -24,10 +24,10 @@ typedef tree <ll, null_type, less <ll>, rb_tree_tag, tree_order_statistics_node_
 #define endl "\n"
 
 template <class Ch, class Tr, class Container>
-basic_ostream <Ch, Tr> & operator << (basic_ostream <Ch, Tr> & os, Container const& x) 
+basic_ostream <Ch, Tr> & operator << (basic_ostream <Ch, Tr> & os, Container const& x)
 {
     os << "{ ";
-    for(auto& y : x) 
+    for(auto& y : x)
     {
         os << y << " ";
     }
@@ -35,7 +35,7 @@ basic_ostream <Ch, Tr> & operator << (basic_ostream <Ch, Tr> & os, Container con
 }
 
 template <class X, class Y>
-ostream & operator << (ostream & os, pair <X, Y> const& p) 
+ostream & operator << (ostream & os, pair <X, Y> const& p)
 {
     return os << "[" << p.ff << ", " << p.ss << "]";
 }
@@ -51,7 +51,7 @@ ll gcd(ll a, ll b)
 }
 
 ll modexp(ll a, ll b, ll c)
-{   
+{
     a%=c;
 
     ll ans = 1;
@@ -70,54 +70,52 @@ ll modexp(ll a, ll b, ll c)
     return ans;
 }
 
-const ll L = 1e6+5;
-const ll mod = 1e9+7;
+ll nxt()
+{
+    ll x;
+    cin >> x;
+    return x;
+}
+
+const ll L = 1e6 + 5;
+const ll mod = 1e9 + 7;
 
 ll dp[L];
 
-int main()
+void solve()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL); cout.tie(NULL);
-
-    ll n;
-    cin >> n;
+    ll n = nxt();
 
     dp[0] = 1;
 
-    for(ll i=1; i<=n; i++)
+    for(ll i = 1; i <= n; i++)
     {
-        dp[i] += dp[i-1];
-
-        if(i >= 2)
+        for(ll j = 1; j <= 6; j++)
         {
-            dp[i] += dp[i-2];
-        }
-
-        if(i >= 3)
-        {
-            dp[i] += dp[i-3];
-        }
-
-        if(i >= 4)
-        {
-            dp[i] += dp[i-4];
-        }
-
-        if(i >= 5)
-        {
-            dp[i] += dp[i-5];
-        }
-
-        if(i >= 6)
-        {
-            dp[i] += dp[i-6];
+            if(i - j >= 0)
+            {
+                dp[i] += dp[i - j];
+            }
         }
 
         dp[i] %= mod;
     }
 
     cout << dp[n] << endl;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+
+    ll T = 1;
+    // T = nxt();
+
+    while(T--)
+    {
+        solve();
+    }
 
     return 0;
 }

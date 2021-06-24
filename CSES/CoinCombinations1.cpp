@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
- 
+
 using namespace __gnu_pbds;
 using namespace std;
 
@@ -24,10 +24,10 @@ typedef tree <ll, null_type, less <ll>, rb_tree_tag, tree_order_statistics_node_
 #define endl "\n"
 
 template <class Ch, class Tr, class Container>
-basic_ostream <Ch, Tr> & operator << (basic_ostream <Ch, Tr> & os, Container const& x) 
+basic_ostream <Ch, Tr> & operator << (basic_ostream <Ch, Tr> & os, Container const& x)
 {
     os << "{ ";
-    for(auto& y : x) 
+    for(auto& y : x)
     {
         os << y << " ";
     }
@@ -35,7 +35,7 @@ basic_ostream <Ch, Tr> & operator << (basic_ostream <Ch, Tr> & os, Container con
 }
 
 template <class X, class Y>
-ostream & operator << (ostream & os, pair <X, Y> const& p) 
+ostream & operator << (ostream & os, pair <X, Y> const& p)
 {
     return os << "[" << p.ff << ", " << p.ss << "]";
 }
@@ -51,7 +51,7 @@ ll gcd(ll a, ll b)
 }
 
 ll modexp(ll a, ll b, ll c)
-{   
+{
     a%=c;
 
     ll ans = 1;
@@ -70,44 +70,54 @@ ll modexp(ll a, ll b, ll c)
     return ans;
 }
 
-const ll L = 2e6+5;
-const ll mod = 1e9+7;
+ll nxt()
+{
+    ll x;
+    cin >> x;
+    return x;
+}
+
+const ll L = 1e6 + 5;
+const ll mod = 1e9 + 7;
 
 ll dp[L];
+
+void solve()
+{
+    ll n = nxt(), x = nxt();
+    basic_string <ll> c(n, 0);
+    generate(all(c), nxt);
+
+    dp[0] = 1;
+
+    for(ll i = 1; i <= x; i++)
+    {
+        for(ll j = 0; j < n; j++)
+        {
+            if(i - c[j] >= 0)
+            {
+                dp[i] += dp[i - c[j]];
+            }
+        }
+
+        dp[i] %= mod;
+    }
+
+    cout << dp[x] << endl;
+}
 
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL); cout.tie(NULL);
 
-    ll n, x;
-    cin >> n >> x;
+    ll T = 1;
+    // T = nxt();
 
-    vector <ll> c;
-
-    for(ll i=0; i<n; i++)
+    while(T--)
     {
-        ll a;
-        cin >> a;
-
-        c.pb(a);
+        solve();
     }
-
-    dp[0] = 1;
-
-    for(ll i=1; i<=x; i++)
-    {
-        for(ll j=0; j<n; j++)
-        {
-            if(i - c[j] >= 0)
-            {
-                dp[i] += dp[i-c[j]];
-                dp[i] %= mod;
-            }
-        }
-    }
-
-    cout << dp[x] << endl;
 
     return 0;
 }

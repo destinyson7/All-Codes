@@ -78,31 +78,48 @@ ll nxt()
 }
 
 const ll L = 1e6 + 5;
-const ll mod = 1e9 + 7;
-
 ll dp[L];
+ll n;
+
+ll res(ll cur)
+{
+    if(cur == 0)
+    {
+        return dp[cur] = 0;
+    }
+
+    if(cur < 0)
+    {
+        return 1e15;
+    }
+
+    if(dp[cur] != -1)
+    {
+        return dp[cur];
+    }
+
+    ll temp = cur;
+    dp[cur] = 1e15;
+
+    while(temp)
+    {
+        if(temp % 10)
+        {
+            dp[cur] = min(dp[cur], 1 + res(cur - temp % 10));
+        }
+
+        temp /= 10;
+    }
+
+    return dp[cur];
+}
 
 void solve()
 {
-    ll n = nxt(), x = nxt();
-    basic_string <ll> c(n, 0);
-    generate(all(c), nxt);
+    n = nxt();
+    memset(dp, -1, sizeof(dp));
 
-    dp[0] = 1;
-
-    for(ll j = 0; j < n; j++)
-    {
-        for(ll i = 1; i <= x; i++)
-        {
-            if(i - c[j] >= 0)
-            {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= mod;
-            }
-        }
-    }
-
-    cout << dp[x] << endl;
+    cout << res(n) << endl;
 }
 
 int main()

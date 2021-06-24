@@ -77,32 +77,68 @@ ll nxt()
     return x;
 }
 
-const ll L = 1e6 + 5;
+const ll L = 1e3 + 5;
 const ll mod = 1e9 + 7;
 
-ll dp[L];
+ll grid[L][L];
+ll dp[L][L];
+
+ll n;
+
+ll res(ll i, ll j)
+{
+    if(i == 0 || j == 0)
+    {
+        return 0;
+    }
+
+    if(dp[i][j] != -1)
+    {
+        return dp[i][j];
+    }
+
+    if(i == 1 && j == 1)
+    {
+        return grid[i][j] == 1;
+    }
+
+    if(grid[i][j] == 0)
+    {
+        return dp[i][j] = 0;
+    }
+
+    dp[i][j] = res(i - 1, j) + res(i, j - 1);
+    dp[i][j] %= mod;
+
+    return dp[i][j];
+}
 
 void solve()
 {
-    ll n = nxt(), x = nxt();
-    basic_string <ll> c(n, 0);
-    generate(all(c), nxt);
+    n = nxt();
 
-    dp[0] = 1;
+    memset(dp, -1, sizeof(dp));
 
-    for(ll j = 0; j < n; j++)
+    for(ll i = 1; i <= n; i++)
     {
-        for(ll i = 1; i <= x; i++)
+        for(ll j = 1; j <= n; j++)
         {
-            if(i - c[j] >= 0)
+            char c;
+            cin >> c;
+
+            if(c == '*')
             {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= mod;
+                grid[i][j] = 0;
+            }
+
+            else
+            {
+                grid[i][j] = 1;
             }
         }
     }
 
-    cout << dp[x] << endl;
+    cout << res(n, n) << endl;
 }
 
 int main()
